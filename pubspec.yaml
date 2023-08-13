@@ -1,0 +1,38 @@
+name: cloudwalknasa
+description: A new Flutter project.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.6 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.5
+  audioplayers: ^0.19.1
+
+
+  # Since this dependency is not crucial and tha app is small I let then without version
+  http:
+  logger:
+  lottie:
+  google_fonts:
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.2
+
+flutter:
+  uses-material-design: true
+  #animation_ll1qdjwt.json
+  #claire_de_lune.mp3
+  #data.json
+  #nasa-logo.png
+  assets:
+    - assets/animation_ll1qdjwt.json
+    - assets/data.json
+    - assets/nasa-logo.png
+
+    - assets/songs/claire_de_lune.mp3
