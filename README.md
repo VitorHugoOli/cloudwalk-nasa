@@ -27,6 +27,10 @@ For now, just have the production entrypoint. Since this is a showcase app.
 
 `flutter test`
 
+## How to build
+
+`flutter build apk --release -t ./lib/entrypoint/production.dart`
+
 ## Folder and file structure
 
 For this project a mixed and more simply version of

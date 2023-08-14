@@ -141,20 +141,12 @@ class _InfoPanelState extends State<InfoPanel> {
               constraints: BoxConstraints(
                 maxHeight: MediaQuery.of(context).size.height * 0.5,
               ),
-              child: Theme(
-                data: ThemeData(
-                  scrollbarTheme: ScrollbarThemeData(
-                    thumbColor: MaterialStateProperty.all(Colors.white),
-                  ),
-                ),
-                child: Scrollbar(
-                  thumbVisibility: true,
-                  thickness: 100,
-                  child: SingleChildScrollView(
-                    child: Text(
-                      widget.data.explanation,
-                      style: const TextStyle(color: Colors.white),
-                    ),
+              child: Scrollbar(
+                thumbVisibility: true,
+                child: SingleChildScrollView(
+                  child: Text(
+                    widget.data.explanation,
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
               ),

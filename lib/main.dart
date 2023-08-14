@@ -43,27 +43,26 @@ class _NasaGalleryState extends State<NasaGallery> with WidgetsBindingObserver {
 
     SharedPreferences.getInstance().then((prefs) async {
       isShowingSplash = prefs.getBool('isShowingSplash');
-      isShowingSplash ??= true;
+      setState(() => isShowingSplash ??= true);
+
       if (isShowingSplash!) {
         prefs.setBool('isShowingSplash', false);
         await Future.delayed(const Duration(seconds: 8)).then((_) {
           setState(() => isShowingSplash = false);
         });
       }
-
       bool? isShowingTutorial = prefs.getBool('isShowingTutorial');
       isShowingTutorial ??= true;
       if (isShowingTutorial) {
         prefs.setBool('isShowingTutorial', false);
         Tutorial.show();
       }
-
-      setState(() {});
     });
   }
 
   get home {
     switch (isShowingSplash) {
+      // we could use a enum instead of bool
       case true:
         return const SplashScreen();
       case false:
