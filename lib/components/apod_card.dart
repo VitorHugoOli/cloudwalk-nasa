@@ -18,7 +18,6 @@ class ApodCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: AspectRatio(
         aspectRatio: 16 / 9,
-        // You may adjust this according to the actual aspect ratio of the images
         child: Stack(
           alignment: Alignment.bottomLeft,
           children: [

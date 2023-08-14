@@ -60,7 +60,7 @@ class FullView extends StatelessWidget {
 
     return Scaffold(
       body: GestureDetector(
-        onDoubleTap: () => print('double tap'),
+        onDoubleTap: () {}, //TODO: Implement double tap to zoom in/out
         child: Stack(
           children: [
             Image.network(

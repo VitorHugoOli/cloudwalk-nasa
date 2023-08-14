@@ -4,7 +4,7 @@ import 'package:cloudwalknasa/src/home/components/tutorial.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum Direction { VERTICAL, HORIZONTAL }
+enum Direction { vertical, horizontal }
 
 class SettingItem {
   final String title;
@@ -14,7 +14,7 @@ class SettingItem {
   const SettingItem({
     required this.title,
     required this.widget,
-    this.direction = Direction.VERTICAL,
+    this.direction = Direction.vertical,
   });
 }
 
@@ -44,7 +44,7 @@ class _SettingsPageState extends State<SettingsPage> {
       SettingItem(
         title: 'Audio Controller',
         widget: AudioPlayerWidget(AudioManager().player),
-        direction: Direction.VERTICAL,
+        direction: Direction.vertical,
       ),
       SettingItem(
         title: 'Toggle - Audio On/Off',
@@ -55,7 +55,7 @@ class _SettingsPageState extends State<SettingsPage> {
             setState(() {});
           },
         ),
-        direction: Direction.HORIZONTAL,
+        direction: Direction.horizontal,
       ),
       SettingItem(
         title: 'Toggle - Reactive splash screen',
@@ -66,7 +66,7 @@ class _SettingsPageState extends State<SettingsPage> {
             setState(() {});
           },
         ),
-        direction: Direction.HORIZONTAL,
+        direction: Direction.horizontal,
       ),
       SettingItem(
         title: 'Tutorial',
@@ -74,7 +74,7 @@ class _SettingsPageState extends State<SettingsPage> {
           onPressed: () => Tutorial.show(),
           child: const Text('Show Tutorial'),
         ),
-        direction: Direction.HORIZONTAL,
+        direction: Direction.horizontal,
       ),
     ];
 
@@ -91,47 +91,42 @@ class _SettingsPageState extends State<SettingsPage> {
             child: ListView.separated(
               itemCount: settings.length,
               shrinkWrap: true,
-              separatorBuilder: (context, index) => Divider(),
-              itemBuilder: (context, index) {
-                final item = settings[index];
-                var children = [
-                  Text(
-                    item.title,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF3A3A3A),
-                    ),
-                  ),
-                  item.widget,
-                ];
-                if (item.direction == Direction.HORIZONTAL) {
-                  children = [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: children,
-                    ),
-                  ];
-                } else {
-                  children = [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: children,
-                    ),
-                  ];
-                }
-                return Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: children,
-                  ),
-                );
-              },
+              separatorBuilder: (context, index) => const Divider(),
+              itemBuilder: buildItemSettings,
             ),
           ),
         ),
       ),
     );
+  }
+
+  Widget? buildItemSettings(context, index) {
+    final item = settings[index];
+    Widget child;
+    var children = [
+      Text(
+        item.title,
+        style: const TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+          color: Color(0xFF3A3A3A),
+        ),
+      ),
+      item.widget,
+    ];
+
+    if (item.direction == Direction.horizontal) {
+      child = Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: children,
+      );
+    } else {
+      child = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: children,
+      );
+    }
+    return Container(
+        padding: const EdgeInsets.symmetric(vertical: 8), child: child);
   }
 }

@@ -65,7 +65,7 @@ class _NasaGalleryState extends State<NasaGallery> with WidgetsBindingObserver {
   get home {
     switch (isShowingSplash) {
       case true:
-        return SplashScreen();
+        return const SplashScreen();
       case false:
         return const HomePage();
       default:
@@ -128,8 +128,8 @@ class _NasaGalleryState extends State<NasaGallery> with WidgetsBindingObserver {
               MaterialStateProperty.all(const TextStyle(color: Colors.white)),
         ),
         scrollbarTheme: ScrollbarThemeData(
-          thumbColor: MaterialStateProperty.all(Color(0xFF3E63A4)),
-          trackColor: MaterialStateProperty.all(Color(0xFF0b3d91)),
+          thumbColor: MaterialStateProperty.all(const Color(0xFF3E63A4)),
+          trackColor: MaterialStateProperty.all(const Color(0xFF0b3d91)),
           thumbVisibility: MaterialStateProperty.all(true),
         ),
       ),

@@ -1,5 +1,5 @@
 import 'package:cloudwalknasa/src/home/components/list/list.dart';
-import 'package:cloudwalknasa/src/home/components/today/full.dart';
+import 'package:cloudwalknasa/src/home/components/today/today.dart';
 import 'package:flutter/material.dart';
 
 import 'components/settings/settings.dart';
@@ -8,7 +8,7 @@ class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage>
@@ -24,10 +24,10 @@ class _HomePageState extends State<HomePage>
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   get hideNavigationBar => Future.delayed(const Duration(seconds: 5), () {
-    if (mounted) {
-      _controller.reverse();
-    }
-  });
+        if (mounted) {
+          _controller.reverse();
+        }
+      });
 
   @override
   void initState() {

@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cloudwalknasa/main.dart';
 import 'package:cloudwalknasa/models/apod.dart';
 import 'package:cloudwalknasa/models/apod_union.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 import 'package:intl/intl.dart';
@@ -56,27 +58,44 @@ class NasaApi {
   }) async {
     checkInit;
 
-    final Map<String, dynamic> params = {
-      "api_key": _apiKey,
-      if (date != null) "date": date,
-      if (startDate != null)
-        "start_date": DateFormat("yyyy-MM-dd").format(startDate),
-      if (endDate != null) "end_date": DateFormat("yyyy-MM-dd").format(endDate),
-      if (count != null) "count": count.toString(),
-      if (thumbs != null) "thumbs": thumbs.toString(),
-    };
+    try {
+      final Map<String, dynamic> params = {
+        "api_key": _apiKey,
+        if (date != null) "date": date,
+        if (startDate != null)
+          "start_date": DateFormat("yyyy-MM-dd").format(startDate),
+        if (endDate != null)
+          "end_date": DateFormat("yyyy-MM-dd").format(endDate),
+        if (count != null) "count": count.toString(),
+        if (thumbs != null) "thumbs": thumbs.toString(),
+      };
 
-    final Uri uri = baseUrl.replace(queryParameters: params);
-    final response = await http.get(uri);
+      final Uri uri = baseUrl.replace(queryParameters: params);
+      final response = await http.get(uri);
 
-    if (response.statusCode == 200) {
-      // Usar um freezed union para retornar o Apod ou ApodList
-      // ps: Isso é matar uma mosca com um canhão, mas é um bom exemplo de como usar freezed
-      return ApodUnion.fromJson(jsonDecode(response.body));
+      if (response.statusCode == 200) {
+        // Usar um freezed union para retornar o Apod ou ApodList
+        // ps: Isso é matar uma mosca com um canhão, mas é um bom exemplo de como usar freezed
+        return ApodUnion.fromJson(jsonDecode(response.body));
+      }
+
+      Logger()
+          .e("Failed to load APOD: ${response.statusCode} ${response.body}");
+      return null;
+    } catch (e) {
+      // Try to find the last Scaffold in the widget tree and show a SnackBar
+      var scaffoldContext = navigatorKey.currentContext
+              ?.findAncestorStateOfType<ScaffoldState>()
+              ?.context ??
+          navigatorKey.currentContext;
+      ScaffoldMessenger.of(scaffoldContext!).showSnackBar(
+        const SnackBar(
+          content: Text("Connection error. Please try again later."),
+        ),
+      );
+      Logger().e("Failed to load APOD: $e");
+      return null;
     }
-
-    Logger().e("Failed to load APOD: ${response.statusCode} ${response.body}");
-    return null;
   }
 
   Future<Apod?> getApod({
