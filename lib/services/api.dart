@@ -1,7 +1,19 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:cloudwalknasa/models/apod.dart';
+import 'package:cloudwalknasa/models/apod_union.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
+import 'package:intl/intl.dart';
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
 
 /// NasaApi class is responsible for making API calls to NASA's Astronomy Picture of the Day (APOD) service.
 ///
@@ -35,10 +47,10 @@ class NasaApi {
   /// [endDate]: The end of the date range, when used with [startDate]. Format: YYYY-MM-DD. Defaults to today.
   /// [count]: If specified, this many randomly chosen images will be returned. Cannot be used with [date] or [startDate] and [endDate].
   /// [thumbs]: If true, returns the URL of the video thumbnail. If the APOD is not a video, this parameter is ignored. Defaults to false.
-  Future<Apod?> getApod({
+  Future<ApodUnion?> _getApod({
     String? date,
-    String? startDate,
-    String? endDate,
+    DateTime? startDate,
+    DateTime? endDate,
     int? count,
     bool? thumbs,
   }) async {
@@ -47,8 +59,9 @@ class NasaApi {
     final Map<String, dynamic> params = {
       "api_key": _apiKey,
       if (date != null) "date": date,
-      if (startDate != null) "start_date": startDate,
-      if (endDate != null) "end_date": endDate,
+      if (startDate != null)
+        "start_date": DateFormat("yyyy-MM-dd").format(startDate),
+      if (endDate != null) "end_date": DateFormat("yyyy-MM-dd").format(endDate),
       if (count != null) "count": count.toString(),
       if (thumbs != null) "thumbs": thumbs.toString(),
     };
@@ -57,10 +70,51 @@ class NasaApi {
     final response = await http.get(uri);
 
     if (response.statusCode == 200) {
-      return Apod.fromJson(jsonDecode(response.body));
+      // Usar um freezed union para retornar o Apod ou ApodList
+      // ps: Isso é matar uma mosca com um canhão, mas é um bom exemplo de como usar freezed
+      return ApodUnion.fromJson(jsonDecode(response.body));
     }
 
     Logger().e("Failed to load APOD: ${response.statusCode} ${response.body}");
     return null;
   }
+
+  Future<Apod?> getApod({
+    String? date,
+    DateTime? startDate,
+    DateTime? endDate,
+    int? count,
+    bool? thumbs,
+  }) async =>
+      (await _getApod(
+        date: date,
+        startDate: startDate,
+        endDate: endDate,
+        count: count,
+        thumbs: thumbs,
+      ))
+          ?.when(
+        apod: (apod) => apod,
+        apodList: (apodList) => apodList.first,
+      );
+
+  Future<List<Apod?>> getApodList({
+    String? date,
+    DateTime? startDate,
+    DateTime? endDate,
+    int? count,
+    bool? thumbs,
+  }) async =>
+      (await _getApod(
+        date: date,
+        startDate: startDate,
+        endDate: endDate,
+        count: count,
+        thumbs: thumbs,
+      ))
+          ?.when(
+        apod: (apod) => [apod],
+        apodList: (apodList) => apodList,
+      ) ??
+      [];
 }

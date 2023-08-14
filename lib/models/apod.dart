@@ -2,7 +2,7 @@ class Apod {
   final String? copyright;
   final String date;
   final String explanation;
-  final String hdurl;
+  final String? hdurl;
   final String mediaType;
   final String serviceVersion;
   final String title;

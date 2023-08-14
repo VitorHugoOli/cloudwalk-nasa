@@ -1,16 +1,27 @@
-# cloudwalknasa
+# Cloudwalk NASA challenge
 
-A new Flutter project.
+Hello, this is a showcase test for the Cloudwalk NASA challenge. In this app we use flutter to
+create a simple app that fetches data from the NASA's Astronomy Picture of the Day API and displays
+it in a gallery.
 
-## Getting Started
+The apps contains two screens, the first one is the picture of the day, and the second one is a
+gallery with the last 30 days of pictures.
 
-This project is a starting point for a Flutter application.
+The app is divided into 3 sections:
 
-A few resources to get you started if this is your first Flutter project:
+1. The Home Page - This is the main page of the app. It displays the image of the day, and a list of
+   the previous images.
+2. The List Page - This page displays a list of the previous images. You can scroll through the
+   list, and tap on an image to view it.
+3. The Settings Page - This page allows you to control the audio playback of the app. You can toggle
+   the audio on/off, and control the audio playback.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## How to run
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+`flutter run -t ./lib/entrypoint/production.dart`
+
+## How to test
+
+## How to build
+
+
